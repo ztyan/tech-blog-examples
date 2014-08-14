@@ -1,0 +1,29 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="mandrill-webhooks" basedir="." default="compile">
+    
+    <property name="dir.src" value="${basedir}/src" />
+	<property name="dir.dest" value="${basedir}/dest" />
+	<property name="dir.dest.classes" value="${dir.dest}/classes" />
+    
+    <import file="${basedir}/build-ivy.xml" />
+    <import file="${basedir}/build-findbugs.xml" />
+    
+    <target name="init" depends="init-ivy" description="Makes neccessary preparations">
+		<mkdir dir="${dir.dest}" />
+		<mkdir dir="${dir.dest.classes}" />
+		<ivy:cachepath pathid="classpath.build" conf="build" file="ivy.xml" />
+	</target>
+	
+    <target name="clean" description="Removes built files">
+		<delete dir="${dir.dest}" />
+	</target>
+	
+    <target name="compile" description="Compiles java source files" depends="init">
+		<javac destdir="${dir.dest.classes}" source="1.7" target="1.7" debug="true" deprecation="true" optimize="false" failonerror="true" encoding="UTF-8">
+			<src path="${dir.src}" />
+			<include name="**/*.java" />
+			<classpath>
+				<path refid="classpath.build" />
+			</classpath>
+		</javac>
+	</target>
+</project>

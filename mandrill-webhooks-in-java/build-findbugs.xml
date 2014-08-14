@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="../../">
+
+	<property name="dir.cache" value="${basedir}/.cache" />
+
+		<property name="findbugs.zip.name" value="findbugs-1.3.9.zip" />
+	<property name="findbugs.temp.dir" value="${dir.cache}/findbugs-temp" />
+	<property name="findbugs.zip.path" value="${findbugs.temp.dir}/${findbugs.zip.name}" />
+	<property name="findbugs.home" value="${findbugs.temp.dir}/findbugs-1.3.9" />
+	<property name="findbugs.antjar.name" value="findbugs-ant.jar" />
+	<property name="findbugs.jvmargs" value="-Xmx1024m -XX:MaxPermSize=128m" />
+
+	<target name="init-findbugs" depends="download-findbugs" unless="findbugs.lib.path">
+		<path id="findbugs-classpath">
+			<fileset dir="${findbugs.home}/lib">
+				<include name="${findbugs.antjar.name}" />
+			</fileset>
+		</path>
+		<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask">
+			<classpath refid="findbugs-classpath" />
+		</taskdef>
+	</target>
+
+	<target name="download-findbugs" unless="offline">
+		<available file="${findbugs.zip.path}" property="findbugs.available" />
+		<antcall target="download-findbugs-inner" />
+	</target>
+
+	<target name="download-findbugs-inner" unless="findbugs.available">
+		<mkdir dir="${findbugs.temp.dir}" />
+		<get src="http://garr.dl.sourceforge.net/sourceforge/findbugs/${findbugs.zip.name}" dest="${findbugs.zip.path}" usetimestamp="true" verbose="true" />
+		<unzip src="${findbugs.zip.path}" dest="${findbugs.temp.dir}" />
+	</target>
+
+	<target name="findbugs" depends="compile, init-findbugs">
+		<findbugs home="${findbugs.home}" effort="max" jvmargs="${findbugs.jvmargs}" output="html" outputFile="${dir.dest}/findbugs-report.html" projectName="mandrill-webhooks">
+			<sourcePath path="${dir.src}" />
+			<class location="${dir.dest.classes}" />
+		</findbugs>
+	</target>
+	
+	<target name="findbugs-xml" depends="compile, init-findbugs">
+		<findbugs home="${findbugs.home}" effort="max" jvmargs="${findbugs.jvmargs}" output="xml:withMessages" outputFile="${dir.dest}/findbugs.xml" projectName="mandrill-webhooks">
+			<sourcePath path="${dir.src}" />
+			<class location="${dir.dest.classes}" />
+		</findbugs>
+	</target>
+
+</project>

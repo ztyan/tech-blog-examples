@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+	<info organisation="com.qminderapp" module="ant-build-tools" />
+	<configurations defaultconfmapping="build->default">
+		<conf name="build" description="Dependencies for building code from the source" />
+	</configurations>
+	<dependencies>
+		<dependency org="log4j" name="log4j" rev="1.2.17" conf="*->master" />
+		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.1.0" conf="build" />
+		<dependency org="org.springframework" name="spring-context" rev="4.0.3.RELEASE" conf="build">
+			<artifact name="spring-context" type="jar" />
+		</dependency>
+		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.3.RELEASE" conf="build">
+			<artifact name="spring-webmvc" type="jar" />
+		</dependency>
+		<dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.9.13" conf="build">
+			<artifact name="jackson-mapper-asl" type="jar" />
+		</dependency>
+		<dependency org="commons-codec" name="commons-codec" rev="1.9" conf="build" />
+	</dependencies>
+</ivy-module>
